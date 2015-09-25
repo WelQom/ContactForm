@@ -40,4 +40,28 @@ class ContactFormPlugin extends BasePlugin
 			'settings' => $this->getSettings()
 		));
 	}
+
+	public function setSettings($values)
+	{
+		if (!$values)
+		{
+			$values = array();
+		}
+
+		if (is_array($values))
+		{
+			// Merge in any values that are stored in craft/config/contactform.php
+			foreach (array('toEmail', 'prependSender', 'prependSubject', 'allowAttachments', 'honeypotField') as $key)
+			{
+				$configValue = craft()->config->get($key, 'contactform');
+
+				if ($configValue !== null)
+				{
+					$values[$key] = $configValue;
+				}
+			}
+		}
+
+		parent::setSettings($values);
+	}
 }
